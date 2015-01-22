@@ -8,110 +8,23 @@
 <head>
     <title>MindTest</title>
     <meta charset="UTF-8" />
-	<style>
-		body{
-			height: 400px;
-			width: 1000px;
-		}
-		.BigDiv_class{
-			background-color: #567ca4;
-			position: relative;
-			top: 0%;
-			left: 0%;
-			margin: 5% 5% 5% 5%;
-			height: auto;
-			width: 40%;	
-		}
-		
-		.QuestDiv_class{
-			background-color: #C5DAF2;
-			position: relative;
-			top: 0%;
-			left: 0%;
-			
-			margin: 0px 0px 0px 0px;
-			
-			text-align: center;
-			font-size: 150%;
-			
-			height: 50%;
-			border-top: 5px solid #567ca4;
-			padding-top: 10px;
-			padding-bottom: 10px;
-			
-			
-		}
-		
-		
-		.Options_class{
-			background-color: #EAEAEA;
-			position: relative;
-			top: 0%;
-			left: 0%;
-			margin-top: 2px;
-			text-align: center;
-			height: auto;
-			width: 100%;	
-			padding-top: 5px;
-			padding-bottom: 5px;
-			font-size: 110%;
-			
-		}
-		.FirstTapDiv_class{
-			background-color: white;
-			position: absolute;
-			top: 0%;
-			left:100%;
-			height: 100%;
-			width: 10%;			
-			text-align: center;
-			border-right: 0px solid black;
-			transition-property: background-color width border-right;
-			transition-duration: 0.7s;
-			z-index: 1000;
-		}
-		.SecondTapDiv_class{
-			background-color: white;
-			position: absolute;
-			top: 0%;
-			left: 100%;
-			height: 100%;
-			
-			width: 10%;		
-			
-			text-align: center;
-			
-			transition-property: background-color width;
-			transition-duration: 0.7s;
-			z-index: 1000;
-		}
-		.FirstTapDiv_class:hover{
-			background-color: #25FF40;
-			width: 12%;
-			transition-property: background-color width;
-			transition-duration: 0.7s;
-		}
-		.SecondTapDiv_class:hover{
-			background-color: #25FF40;
-			width: 12%;
-			transition-property: background-color width;
-			transition-duration: 0.7s;
-		}
-		
-	</style>
-
+    <link type="text/css" rel="stylesheet" href="./style.css" />
 </head>
 <body>
 
 <script type="text/javascript">
 /////////////=======================HELLO_MESSAGE_CLASS=================	
-	var MessageBox = function() {
+	var MessageBox = function(msg) {
 		var MessageDiv, OKButton, CancelButton;
 		
 		this.MessageDiv = document.createElement("div");
 		this.MessageDiv.setAttribute("class", "MessageDiv_class");
 		this.MessageDiv.parent = this;
-
+	
+		this.MessageTextDiv = document.createElement("div");
+		this.MessageTextDiv.setAttribute("class", "MessageDivText_class");
+		this.MessageTextDiv.parent = this;
+	
 		this.OKButton = document.createElement("button");
 		this.OKButton.setAttribute("class", "MessageButtons_class");
 		this.OKButton.parent = this;
@@ -130,8 +43,14 @@
 		}
 
 //------------------------------HANDLERS--------------------------------
-	
-	
+		this.OKButton.onclick = function () {
+		
+		
+		}
+		
+		this.CancelButton.onclick = function () {
+		
+		}
 	
 	};	
 ////////////========================END_OF_HELLO_MESSAGE_CLASS==========
@@ -143,12 +62,15 @@
 			BigDiv, //Это главный DIV в котором хранятся все остальные элементы
 			FirstOption, //Первый вариант ответа
 			SecondOption, //Второй вариант ответа
-			FirstTapDiv, //Это элемент
-			SecondTapDiv, //
-			FirstOptionText, //
-			SecondOptionText, //
-			AjaxRequest, //
-			QuestionNumber; //
+			FirstTapDiv, //Это элемент для выбора 1 варианта
+			SecondTapDiv, // Это элемент для выбора 2 варианта
+			FirstOptionText, // Это текст, отображаемый в первом варианте ответа
+			SecondOptionText, // Это текст, отображаемый во втором варианте ответа
+			FirstOptionNumber,
+			SecondOptionNumber,
+			AjaxRequest, // Это текст AJAX запроса 
+			QuestionNumber, // Это номер вопроса, который следует выбрать из БД
+			timer; //Таймер для остановки движения объекта
 		
 		this.QuestionNumber = num;
 		this.Answer = "N/A";
@@ -176,12 +98,15 @@
 		this.SecondOptionText = document.createElement("div");
 		this.SecondOptionText.parent = this;	
 		
+		this.FirstOptionNumber = document.createElement("div");
+		this.FirstOptionNumber.parent = this;
+		
 		this.FirstTapDiv = document.createElement("div");
-		this.FirstTapDiv.setAttribute("class", "FirstTapDiv_class");
+		this.FirstTapDiv.setAttribute("class", "TapDiv_class");
 		this.FirstTapDiv.parent = this;
 		
 		this.SecondTapDiv = document.createElement("div");
-		this.SecondTapDiv.setAttribute("class", "SecondTapDiv_class");
+		this.SecondTapDiv.setAttribute("class", "TapDiv_class");
 		this.SecondTapDiv.parent = this;	
 
 //////-------------------------FUNCTIONS DEFINITION---------------------		
@@ -207,6 +132,35 @@
 		
 		this.setPointerCursor = function(Cursor) {
 			this.style.cursor = Cursor;
+		}
+		
+		this.comeTo = function(to, value, parent) {
+			
+			if (to == "left") {
+				if (Number(parent.BigDiv.style.left.slice(0, -1)) <= value)
+					clearInterval(parent.timer);
+				parent.BigDiv.style.left = (Number(parent.BigDiv.style.left.slice(0, -1)) - 1).toString() + "%";			
+			}
+			
+			
+			if (to == "right") {
+				if (Number(parent.BigDiv.style.left.slice(0, -1)) >= value)
+					clearInterval(parent.timer);
+				parent.BigDiv.style.left = (Number(parent.BigDiv.style.left.slice(0, -1)) + 1).toString() + "%";			
+			}
+			
+			if (to == "top") {
+				if (Number(parent.BigDiv.style.top.slice(0, -1)) <= value)
+					clearInterval(parent.timer);
+				parent.BigDiv.style.top = (Number(parent.BigDiv.style.top.slice(0, -1)) - 1).toString() + "%";			
+			}
+			
+			if (to == "bottom") {
+				if (Number(parent.BigDiv.style.top.slice(0, -1)) >= value)
+					clearInterval(parent.timer);
+				parent.BigDiv.style.top = (Number(parent.BigDiv.style.top.slice(0, -1)) + 1).toString() + "%";			
+			}
+		
 		}
 		
 		
@@ -238,11 +192,13 @@
 //////---------------------------------HANDLERS-------------------------		
 		this.FirstTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["A"]);
-			this.parent.BigDiv.style.left = "-100%";
+			this.parent.BigDiv.style.left = "0%";
+			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
 		};
 		this.SecondTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["B"]);
-			this.parent.BigDiv.style.left = "-100%";
+			this.parent.BigDiv.style.left = "0%";
+			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
 		};
 		
 		this.FirstTapDiv.onmouseover = function() {
@@ -288,32 +244,17 @@
 
 */
 
-	function doAjaxRequest() {
+	function AjaxQuery(datas) {
+		// datas - запрос, должен быть, в application/x-www-form-urlencoded формате данных
 		var request = new XMLHttpRequest();
-
-		
 		request.open = ("POST", "/funcs.php", true);
-		
 		request.onreadystatechange = function() {
-			
-			if (request.readyState === 4 && request.status === 200) {
-				var JSONAnswer = request.responseText;
-				JSONAnswer = JSON.stringify(JSONAnswer);
-				var ServerAnswer = JSON.parse(JSONAnswer);
-				
-				
-				
-				
-					 				
-			} else {
-				window.alert(request.statusText);
+				if (request.readyState === 4 && (request.status === 200 || request.statusText==="OK")) {
+					window.alert(request.responseText);
+				}
 			}
-			
-		};
-		
-		request.setRequestHeader("Content-Type", "text/plane;charset=UTF-8");
-		
-		
+			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			request.send(datas);
 	}
 
 
