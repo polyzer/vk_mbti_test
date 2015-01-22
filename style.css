@@ -1,0 +1,86 @@
+		body{
+			height: 400px;
+			width: 1000px;
+		}
+		.BigDiv_class{
+			background-color: #567ca4;
+			position: relative;
+			top: 0%;
+			left: 0%;
+			margin: 5% 5% 5% 5%;
+			height: auto;
+			width: 40%;	
+		}
+		
+		.QuestDiv_class{
+			background-color: #C5DAF2;
+			position: relative;
+			top: 0%;
+			left: 0%;
+			
+			margin: 0px 0px 0px 0px;
+			
+			text-align: center;
+			font-size: 150%;
+			
+			height: 50%;
+			border-top: 5px solid #567ca4;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			
+			
+		}
+		
+		
+		.Options_class{
+			background-color: #EAEAEA;
+			position: relative;
+			top: 0%;
+			left: 0%;
+			margin-top: 2px;
+			text-align: center;
+			height: auto;
+			width: 100%;	
+			padding-top: 5px;
+			padding-bottom: 5px;
+			font-size: 110%;
+			
+		}
+		.TapDiv_class{
+			background-color: #7D7D7D;
+			position: absolute;
+			top: 0%;
+			left:100%;
+			height: 100%;
+			width: 10%;			
+			text-align: center;
+			border-right: 0px solid black;
+			transition-property: background-color width border-right;
+			transition-duration: 0.7s;
+			z-index: 1000;
+		}
+		.TapDiv_class:hover{
+			background-color: #25FF40;
+			width: 12%;
+			box-shadow:  0 0 2px #25FF40;
+			transition-property: background-color width box-shadow;
+			transition-duration: 0.7s;
+		}
+		
+		.NumberOptionDiv_class{
+			background-color: white;
+			position: absolute;
+			top: 0%;
+			left:100%;
+			height: 100%;
+			width: 10%;			
+			text-align: center;
+			border-right: 0px solid black;
+			transition-property: background-color width border-right;
+			transition-duration: 0.7s;
+			z-index: 1000;
+		}
+		
+		.MessageDiv_class{
+			
+		}
