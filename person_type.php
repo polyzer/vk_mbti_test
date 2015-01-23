@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 /////////////=======================HELLO_MESSAGE_CLASS=================	
-	var MessageBox = function(msg) {
+	var MessageBox = function(header_text, msg_text, OKButton_text, CancelButton_text) {
 		var MessageDiv, MessageHeaderDiv, MessageTextDiv, MessageButtonsDiv, OKButton, CancelButton, timer;
 		
 		this.MessageDiv = document.createElement("div");
@@ -77,23 +77,37 @@
 		
 		this.Accept = function () {
 			this.MessageDiv.style.left = "0%";
-			this.timer = setInterval(this.comeTo, 15, "top", -50, this);
+			this.timer = setInterval(this.comeTo, 15, "top", -500, this);
 			//Удаляем Месседж,
 			//запускаем приложение!
 			createQuestions();
+			QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 15, "top", "0", QuestArray[CurrentQuestBox]);
 		}
 		this.Cancel = function () {
 			window.alert("CLOSE");
 			//Закрыть приложение!
 		}
 		
-		this.setMessageHeader = function (text) {
-			this.MessageHeaderDiv.innerHTML += text;
+		this.setMessageHeader = function (header_text) {
+			this.MessageHeaderDiv.innerHTML = header_text;
 		}
 		
-		this.setMessageText = function (text) {
-			this.MessageTextDiv.innerHTML += text;
+		this.setMessageText = function (msg_text) {
+			this.MessageTextDiv.innerHTML = msg_text;
 		}
+		this.setOKButtonText = function(OKButton_text) {
+			this.OKButton.innerHTML = OKButton_text;
+		}
+		this.setCancelButtonText = function(CancelButton_text) {
+			this.CancelButton.innerHTML = CancelButton_text;
+		}
+		this.setTexts = function (header_text, msg_text, OKButton_text, CancelButton_text) {
+			this.setMessageHeader(header_text);
+			this.setMessageText(msg_text);
+			this.setOKButtonText(OKButton_text);
+			this.setCancelButtonText(CancelButton_text);
+		}
+
 //------------------------------HANDLERS--------------------------------
 		this.OKButton.onclick = function () {
 			this.parent.Accept();
@@ -138,7 +152,7 @@
 		
 		this.QuestionNumber = num;
 		this.Answer = "N/A";
-		this.AjaxRequest = 'question_number=' + (this.QuestionNumber + 1).toString() + '&operation=get_question';		
+		this.AjaxRequest = 'question_number=' + this.QuestionNumber.toString() + '&operation=get_question';		
 		
 		this.BigDiv = document.createElement("div");
 		this.BigDiv.setAttribute("class", "BigDiv_class");
@@ -258,11 +272,15 @@
 			this.parent.OptionTap.apply(this.parent, ["A"]);
 			this.parent.BigDiv.style.left = "0%";
 			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
+			++CurrentQuestBox;
+			QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 15, "top", "0", QuestArray[CurrentQuestBox]);
 		};
 		this.SecondTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["B"]);
 			this.parent.BigDiv.style.left = "0%";
 			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
+			++CurrentQuestBox;
+			QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 15, "top", "0", QuestArray[CurrentQuestBox]);
 		};
 		
 		this.FirstTapDiv.onmouseover = function() {
@@ -280,6 +298,7 @@
 		};	
 		
 /////----------------------------------CALL INIT METHODS----------------
+		this.BigDiv.style.top = "100%";
 		this.setTapLabel();
 		this.doAjaxRequest(this.AjaxRequest);
 
@@ -296,18 +315,122 @@
 
 
 	};//////////======END OF QUESTBOX CLASS DEFINITION==================
+	
+////========================TestResults_CLASS===========================	
+	var TestResults = function () {
+
+		var FirstColumn, SecondColumn, 
+			FirstA, FirstB, SecondA, SecondB,
+			ThirdColumn, FourthColumn,
+			ThirdA, ThirdB, FourthA, FourthB,
+			 A, B;
+		this.A = 0;
+		this.B = 0;
+		this.FirstA = 0;
+		this.FirstB = 0;		
+		this.SecondA = 0;
+		this.SecondB = 0;
+		this.ThirdA = 0;
+		this.ThirdB = 0;
+		this.FourthA = 0;
+		this.FourthB = 0;
+		
+				
+		this.setNullAB = function () {
+			this.A = 0;
+			this.B = 0;
+		}
+		this.computingResults = function () {
+			for (var i = 1; i <= 7; i++) {
+				j = i;
+				while (j <= 70) {
+					if (QuestArray[j].Answer == "A") {
+						this.A++;
+					} else {
+						this.B++;
+					}
+					j+=7;
+				}
+				//Считаем для I|E
+				if (i == 1) {
+					this.FirstA += this.A;
+					this.FirstB += this.B;
+					if (this.A <= this.B)
+						this.FirstColumn = "I";
+					else 
+						this.FirstColumn = "E";
+					this.setNullAB();
+				}
+				//Считаем для S|N
+				if (i == 2 || i == 3) {
+					this.SecondA += this.A;
+					this.SecondB += this.B;
+					if (i == 3)
+						if (this.A <= this.B)
+							this.SecondColumn = "N";
+						else 
+							this.SecondColumn = "S";
+					this.setNullAB();
+				}
+				//Считаем для T|F
+				if (i == 4 || i == 5) {
+					this.ThirdA += this.A;
+					this.ThirdB += this.B;
+					if (i == 5)
+						if (this.A <= this.B)
+							this.FirstColumn = "F";
+						else 
+							this.FirstColumn = "T";
+					this.setNullAB();
+				}
+				//Считаем для J|P
+				if (i == 6 || i == 7) {
+					this.FourthA += this.A;
+					this.FourthB += this.B;
+					if (i == 7)
+						if (this.A <= this.B)
+							this.FourthColumn = "P";
+						else 
+							this.FourthColumn = "J";
+					this.setNullAB();
+				}				
+			}
+			//Третий заход
+			
+			
+		}
+		
+		this.Results = function () {
+			res = this.FirstColumn + " A:" + this.FirstA + " B:" + this.FirstB + " <br />";
+			res += this.SecondColumn + " A:" + this.SecondA + " B:" + this.SecondB + " <br />";
+			res += this.ThirdColumn + " A:" + this.ThirdA + " B:" + this.ThirdB + " <br />";
+			res += this.FourthColumn + " A:" + this.FourthA + " B:" + this.FourthB + " <br />";
+			return res;
+		}
+		
+		
+	};
+	
+	
+//====================END_OF_TESTRESULTS_CLASS==========================	
 //======================================================================	
 	var QuestArray = [];
-		
+	var CurrentQuestBox = 1;	
 	function createQuestions() {	
-		for (var i = 0; i < 20; i++) {
+		for (var i = 1; i <= 70; i++) {
 			QuestArray[i] = new QuestBox(i);
 		}
 	}
-
-	var WelcomeMessage = new MessageBox("Хотите начать тест?");
+	
+	var WelcomeMessage = new MessageBox();
+	WelcomeMessage.setTexts("Определение типа личности!",
+							"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
+							"ОК",
+							"Отмена");
 /*
-	Все работает!
+	Знаю, что говнокод дичайший...
+	Время будет - все исправлю...
+	А щас надо бы сделать поддержку ВК.
 
 */
 
@@ -325,8 +448,7 @@
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			request.send(datas);
 	}
-
-
+	
 
 
 </script>
