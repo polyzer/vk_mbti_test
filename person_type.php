@@ -15,42 +15,106 @@
 <script type="text/javascript">
 /////////////=======================HELLO_MESSAGE_CLASS=================	
 	var MessageBox = function(msg) {
-		var MessageDiv, OKButton, CancelButton;
+		var MessageDiv, MessageHeaderDiv, MessageTextDiv, MessageButtonsDiv, OKButton, CancelButton, timer;
 		
 		this.MessageDiv = document.createElement("div");
 		this.MessageDiv.setAttribute("class", "MessageDiv_class");
 		this.MessageDiv.parent = this;
-	
+		
+		this.MessageHeaderDiv = document.createElement("div");
+		this.MessageHeaderDiv.setAttribute("class", "MessageHeaderDiv_class");
+		this.MessageHeaderDiv.parent = this;
+		
 		this.MessageTextDiv = document.createElement("div");
-		this.MessageTextDiv.setAttribute("class", "MessageDivText_class");
+		this.MessageTextDiv.setAttribute("class", "MessageTextDiv_class");
 		this.MessageTextDiv.parent = this;
+
+		this.MessageButtonsDiv = document.createElement("div");
+		this.MessageButtonsDiv.setAttribute("class", "MessageButtonsDiv_class");
+		this.MessageButtonsDiv.parent = this;
+
 	
 		this.OKButton = document.createElement("button");
-		this.OKButton.setAttribute("class", "MessageButtons_class");
+		this.OKButton.setAttribute("class", "OKButton_class");
 		this.OKButton.parent = this;
+		this.OKButton.innerHTML = "Начать тест";
 		
 		this.CancelButton = document.createElement("button");
-		this.CancelButton.setAttribute("class", "MessageButtons_class");
+		this.CancelButton.setAttribute("class", "CancelButton_class");
 		this.CancelButton.parent = this;
+		this.CancelButton.innerHTML = "Отмена";
 //----------------------FUNCTIONS_DEFINITION----------------------------
 
-		this.ShowMessage = function () {
+		this.comeTo = function(to, value, parent) {
 			
-		}
+			if (to == "left") {
+				if (Number(parent.MessageDiv.style.left.slice(0, -1)) <= value)
+					clearInterval(parent.timer);
+				parent.MessageDiv.style.left = (Number(parent.MessageDiv.style.left.slice(0, -1)) - 1).toString() + "%";			
+			}
+			
+			
+			if (to == "right") {
+				if (Number(parent.MessageDiv.style.left.slice(0, -1)) >= value)
+					clearInterval(parent.timer);
+				parent.MessageDiv.style.left = (Number(parent.MessageDiv.style.left.slice(0, -1)) + 1).toString() + "%";			
+			}
+			
+			if (to == "top") {
+				if (Number(parent.MessageDiv.style.top.slice(0, -1)) <= value)
+					clearInterval(parent.timer);
+				parent.MessageDiv.style.top = (Number(parent.MessageDiv.style.top.slice(0, -1)) - 1).toString() + "%";			
+			}
+			
+			if (to == "bottom") {
+				if (Number(parent.BigDiv.style.top.slice(0, -1)) >= value)
+					clearInterval(parent.timer);
+				parent.MessageDiv.style.top = (Number(parent.MessageDiv.style.top.slice(0, -1)) + 1).toString() + "%";			
+			}
 		
-		this.Accept = function () {
-			
 		}
 
+		
+		this.Accept = function () {
+			this.MessageDiv.style.left = "0%";
+			this.timer = setInterval(this.comeTo, 15, "top", -50, this);
+			//Удаляем Месседж,
+			//запускаем приложение!
+			createQuestions();
+		}
+		this.Cancel = function () {
+			window.alert("CLOSE");
+			//Закрыть приложение!
+		}
+		
+		this.setMessageHeader = function (text) {
+			this.MessageHeaderDiv.innerHTML += text;
+		}
+		
+		this.setMessageText = function (text) {
+			this.MessageTextDiv.innerHTML += text;
+		}
 //------------------------------HANDLERS--------------------------------
 		this.OKButton.onclick = function () {
-		
-		
+			this.parent.Accept();
 		}
 		
 		this.CancelButton.onclick = function () {
-		
+			this.parent.Cancel();
 		}
+
+//--------------------------FUNCTIONS CALL------------------------------
+
+		this.setMessageHeader("WELCOME");
+		this.setMessageText("TEXT!");
+		
+//----------------------------APPENDS-----------------------------------		
+		this.MessageDiv.appendChild(this.MessageHeaderDiv);
+		this.MessageDiv.appendChild(this.MessageTextDiv);
+		this.MessageButtonsDiv.appendChild(this.OKButton);
+		this.MessageButtonsDiv.appendChild(this.CancelButton);
+		this.MessageDiv.appendChild(this.MessageButtonsDiv);
+		document.body.appendChild(this.MessageDiv);
 	
 	};	
 ////////////========================END_OF_HELLO_MESSAGE_CLASS==========
@@ -234,15 +298,20 @@
 	};//////////======END OF QUESTBOX CLASS DEFINITION==================
 //======================================================================	
 	var QuestArray = [];
-	for (var i = 0; i < 8; i++) {
-		QuestArray[i] = new QuestBox(i);
+		
+	function createQuestions() {	
+		for (var i = 0; i < 20; i++) {
+			QuestArray[i] = new QuestBox(i);
+		}
 	}
-	
-	
+
+	var WelcomeMessage = new MessageBox("Хотите начать тест?");
 /*
 	Все работает!
 
 */
+
+
 
 	function AjaxQuery(datas) {
 		// datas - запрос, должен быть, в application/x-www-form-urlencoded формате данных
