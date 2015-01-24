@@ -228,8 +228,9 @@
 			}
 			
 			if (to == "top") {
-				if (Number(parent.BigDiv.style.top.slice(0, -1)) <= value)
+				if (Number(parent.BigDiv.style.top.slice(0, -1)) <= value){
 					clearInterval(parent.timer);
+				}
 				parent.BigDiv.style.top = (Number(parent.BigDiv.style.top.slice(0, -1)) - 1).toString() + "%";			
 			}
 			
@@ -272,15 +273,25 @@
 			this.parent.OptionTap.apply(this.parent, ["A"]);
 			this.parent.BigDiv.style.left = "0%";
 			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
-			++CurrentQuestBox;
-			QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 15, "top", "0", QuestArray[CurrentQuestBox]);
+			if (CurrentQuestBox < QuestionsCount){
+				showDiv.innerHTML = CurrentQuestBox + " A";
+				++CurrentQuestBox;
+				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 12, "top", "0", QuestArray[CurrentQuestBox]);
+			} else {
+				TestEnding();
+			}
 		};
 		this.SecondTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["B"]);
 			this.parent.BigDiv.style.left = "0%";
 			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
-			++CurrentQuestBox;
-			QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 15, "top", "0", QuestArray[CurrentQuestBox]);
+			if (CurrentQuestBox < QuestionsCount){
+				showDiv.innerHTML = CurrentQuestBox + " B";
+				++CurrentQuestBox;
+				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 12, "top", "0", QuestArray[CurrentQuestBox]);
+			} else {
+				TestEnding();
+			}
 		};
 		
 		this.FirstTapDiv.onmouseover = function() {
@@ -323,7 +334,7 @@
 			FirstA, FirstB, SecondA, SecondB,
 			ThirdColumn, FourthColumn,
 			ThirdA, ThirdB, FourthA, FourthB,
-			 A, B;
+			 A, B, ResultString;
 		this.A = 0;
 		this.B = 0;
 		this.FirstA = 0;
@@ -343,7 +354,7 @@
 		this.computingResults = function () {
 			for (var i = 1; i <= 7; i++) {
 				j = i;
-				while (j <= 70) {
+				while (j <= QuestionsCount) {
 					if (QuestArray[j].Answer == "A") {
 						this.A++;
 					} else {
@@ -378,9 +389,9 @@
 					this.ThirdB += this.B;
 					if (i == 5)
 						if (this.A <= this.B)
-							this.FirstColumn = "F";
+							this.ThirdColumn = "F";
 						else 
-							this.FirstColumn = "T";
+							this.ThirdColumn = "T";
 					this.setNullAB();
 				}
 				//Считаем для J|P
@@ -398,14 +409,15 @@
 			//Третий заход
 			
 			
-		}
-		
-		this.Results = function () {
 			res = this.FirstColumn + " A:" + this.FirstA + " B:" + this.FirstB + " <br />";
 			res += this.SecondColumn + " A:" + this.SecondA + " B:" + this.SecondB + " <br />";
 			res += this.ThirdColumn + " A:" + this.ThirdA + " B:" + this.ThirdB + " <br />";
 			res += this.FourthColumn + " A:" + this.FourthA + " B:" + this.FourthB + " <br />";
-			return res;
+			this.Result = res;
+		}
+		
+		this.saveResults = function () {
+			
 		}
 		
 		
@@ -414,10 +426,21 @@
 	
 //====================END_OF_TESTRESULTS_CLASS==========================	
 //======================================================================	
+	var showDiv = document.createElement("div");
+	showDiv.style.position = "absolute";
+	showDiv.style.top = "0%";
+	showDiv.style.left = "80%";
+	document.body.appendChild(showDiv);
+	
+	
+	
+	var QuestionsCount = 70;
 	var QuestArray = [];
-	var CurrentQuestBox = 1;	
+	var CurrentQuestBox = 1;
+	var ResultsElement = new TestResults();	
+	var ResultBox;
 	function createQuestions() {	
-		for (var i = 1; i <= 70; i++) {
+		for (var i = 1; i <= QuestionsCount; i++) {
 			QuestArray[i] = new QuestBox(i);
 		}
 	}
@@ -428,25 +451,42 @@
 							"ОК",
 							"Отмена");
 /*
-	Знаю, что говнокод дичайший...
-	Время будет - все исправлю...
-	А щас надо бы сделать поддержку ВК.
+	Все работает!
 
 */
 
 
+	
+	function TestEnding () {
+		ResultsElement.computingResults();
+		ResultBox = new MessageBox();
+		ResultBox.setTexts(
+			"Ваши результаты:",
+			ResultsElement.Result,
+			"OK",
+			"Отмена"
+		);
+	}
 
 	function AjaxQuery(datas) {
 		// datas - запрос, должен быть, в application/x-www-form-urlencoded формате данных
 		var request = new XMLHttpRequest();
 		request.open = ("POST", "/funcs.php", true);
 		request.onreadystatechange = function() {
-				if (request.readyState === 4 && (request.status === 200 || request.statusText==="OK")) {
-					window.alert(request.responseText);
+			if (request.readyState === 4 && (request.status === 200 || request.statusText==="OK")) {
+				answr = request.responseText.slice(0, -3);//Обрезание боковых скобок и кавычек
+				answr = answr.split('&&&');//Создание массива из строки
+				for (var i = 0; i < answr.length; i++) {
+					answr[i] = answr[i].split('===');//Создание двумерного массива
+					answr[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
 				}
+				this.parent.setQuestion(answr["question"]);
+				this.parent.setFirstAnswer(answr["first_answer"]);
+				this.parent.setSecondAnswer(answr["second_answer"]);
 			}
-			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			request.send(datas);
+		}		
+		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		request.send(datas);
 	}
 	
 
