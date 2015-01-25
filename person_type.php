@@ -347,7 +347,7 @@
 		this.FourthA = 0;
 		this.FourthB = 0;
 		this.DataStatus = "NO_DATA";
-		this.VKID = "id4923947";
+		this.VKID = MyVK.user_id;
 
 				
 		this.setNullAB = function () {
@@ -465,7 +465,7 @@
 								  thisObject.ThirdColumn + "<br>" +
 								  thisObject.FourthColumn;
 					thisObject.DataStatus = "YES_DATA";//Данные есть - вывести последний результат, и предложить пройти еще раз
-					window.alert(ResultsElement.DataStatus);
+					//window.alert(ResultsElement.DataStatus);
 
 				} else {
 					thisObject.DataStatus = "NO_DATA"; //Нет данных, значит - показываем приветствие
@@ -479,6 +479,23 @@
 	};
 	
 	
+	var VK_VARS = function () {
+		var api_id, api_settings, viewer_id,
+			viewer_type, sid, secret, access_token,
+			user_id, group_id, is_app_user, auth_key,
+			language, is_secure, ads_app_id, referrer;
+		answr = location.search;
+		answr = answr.split("&");
+		for (var i = 0; i < answr.length; i++) {
+			answr[i] = answr[i].split('=');//Создание двумерного массива
+			this[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
+		}	
+		if (this.user_id == 0) {
+			window.alert("Запустите приложение со своей страницы, пожалуйста!");
+
+		}
+	};
+	
 //====================END_OF_TESTRESULTS_CLASS==========================	
 //======================================================================	
 	var showDiv = document.createElement("div");
@@ -487,15 +504,14 @@
 	showDiv.style.left = "80%";
 	document.body.appendChild(showDiv);
 	
-	
-	
+	var MyVK = new VK_VARS();
 	var QuestionsCount = 70;
 	var QuestArray = [];
 	var CurrentQuestBox = 1;
 	var ResultBox;
 	var ResultsElement = new TestResults();	
 	var WelcomeMessage = new MessageBox();
-	window.alert(ResultsElement.DataStatus);	
+	//window.alert(ResultsElement.DataStatus);	
 	if (ResultsElement.DataStatus == "NO_DATA") {
 		WelcomeMessage.setTexts("Определение типа личности!",
 								"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
@@ -509,6 +525,7 @@
 			"Отмена"
 		);
 	}
+	
 	
 	
 	
