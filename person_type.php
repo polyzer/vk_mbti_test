@@ -428,7 +428,7 @@
 			res +="fourth_column="+this.FourthColumn+"__"+this.FourthA+"__"+this.FourthB+"&";
 			res +="date_time="+this.DateTime+"&";
 			res +="vk_id="+ this.VKID + "&operation=save_test_result";
-			AjaxQuery(res, this.onSaveReadyFunc, thisObject, true);
+			AjaxQuery(res, this.onSaveReadyFunc, this, true);
 		}
 		
 		this.onSaveReadyFunc = function (request, thisObject) {
