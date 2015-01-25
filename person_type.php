@@ -276,7 +276,7 @@
 			if (CurrentQuestBox < QuestionsCount){
 				showDiv.innerHTML = CurrentQuestBox + " A";
 				++CurrentQuestBox;
-				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 12, "top", "0", QuestArray[CurrentQuestBox]);
+				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 3, "top", "0", QuestArray[CurrentQuestBox]);
 			} else {
 				TestEnding();
 			}
@@ -288,7 +288,7 @@
 			if (CurrentQuestBox < QuestionsCount){
 				showDiv.innerHTML = CurrentQuestBox + " B";
 				++CurrentQuestBox;
-				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 12, "top", "0", QuestArray[CurrentQuestBox]);
+				QuestArray[CurrentQuestBox].timer = setInterval(QuestArray[CurrentQuestBox].comeTo, 3, "top", "0", QuestArray[CurrentQuestBox]);
 			} else {
 				TestEnding();
 			}
@@ -334,7 +334,8 @@
 			FirstA, FirstB, SecondA, SecondB,
 			ThirdColumn, FourthColumn,
 			ThirdA, ThirdB, FourthA, FourthB,
-			 A, B, ResultString;
+			 A, B, ResultString, DataStatus,
+			 DateTime, VKID;
 		this.A = 0;
 		this.B = 0;
 		this.FirstA = 0;
@@ -345,12 +346,15 @@
 		this.ThirdB = 0;
 		this.FourthA = 0;
 		this.FourthB = 0;
-		
+		this.DataStatus = "NO_DATA";
+		this.VKID = "id4923947";
+
 				
 		this.setNullAB = function () {
 			this.A = 0;
 			this.B = 0;
 		}
+		
 		this.computingResults = function () {
 			for (var i = 1; i <= 7; i++) {
 				j = i;
@@ -416,9 +420,60 @@
 			this.Result = res;
 		}
 		
+		
 		this.saveResults = function () {
-			
+			res = "first_column="+this.FirstColumn+"__"+this.FirstA+"__"+this.FirstB+"&";
+			res +="second_column="+this.SecondColumn+"__"+this.SecondA+"__"+this.SecondB+"&";
+			res +="third_column="+this.ThirdColumn+"__"+this.ThirdA+"__"+this.ThirdB+"&";
+			res +="fourth_column="+this.FourthColumn+"__"+this.FourthA+"__"+this.FourthB+"&";
+			res +="date_time="+this.DateTime+"&";
+			res +="vk_id="+ this.VKID + "&operation=save_test_result";
+			AjaxQuery(res, this.onSaveReadyFunc, thisObject, true);
 		}
+		
+		this.onSaveReadyFunc = function (request, thisObject) {
+				answr = request.responseText.slice(0, -3);//Обрезание боковых скобок и кавычек
+				answr = answr.split('&&&');//Создание массива из строки
+				for (var i = 0; i < answr.length; i++) {
+					answr[i] = answr[i].split('===');//Создание двумерного массива
+					answr[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
+				}
+				window.alert(answr["server_answer"]);
+		}
+		
+		this.getResults = function () {
+			res = "vk_id="+ this.VKID + "&operation=get_test_result";
+			AjaxQuery(res, this.onGetReadyFunc, this, false);
+		}
+		
+		this.onGetReadyFunc = function (request, thisObject) {
+				answr = request.responseText.slice(0, -3);//Обрезание боковых скобок и кавычек
+				answr = answr.split('&&&');//Создание массива из строки
+				
+				for (var i = 0; i < answr.length; i++) {
+					answr[i] = answr[i].split('===');//Создание двумерного массива
+					answr[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
+				}
+				///window.alert(answr["server_answer"]);
+				if (answr["server_answer"] == "YES_DATA") {
+					thisObject.FirstColumn = answr["first_column"];
+					thisObject.SecondColumn = answr["second_column"];
+					thisObject.ThirdColumn = answr["third_column"];
+					thisObject.FourthColumn = answr["fourth_column"];
+					thisObject.Result = thisObject.FirstColumn + "<br>" + 
+								  thisObject.SecondColumn + "<br>" +
+								  thisObject.ThirdColumn + "<br>" +
+								  thisObject.FourthColumn;
+					thisObject.DataStatus = "YES_DATA";//Данные есть - вывести последний результат, и предложить пройти еще раз
+					window.alert(ResultsElement.DataStatus);
+
+				} else {
+					thisObject.DataStatus = "NO_DATA"; //Нет данных, значит - показываем приветствие
+				}
+							
+		}
+		
+		this.getResults();
 		
 		
 	};
@@ -437,28 +492,41 @@
 	var QuestionsCount = 70;
 	var QuestArray = [];
 	var CurrentQuestBox = 1;
-	var ResultsElement = new TestResults();	
 	var ResultBox;
+	var ResultsElement = new TestResults();	
+	var WelcomeMessage = new MessageBox();
+	window.alert(ResultsElement.DataStatus);	
+	if (ResultsElement.DataStatus == "NO_DATA") {
+		WelcomeMessage.setTexts("Определение типа личности!",
+								"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
+								"ОК",
+								"Отмена");
+	} else {
+		WelcomeMessage.setTexts(
+			"Ваши прошлые результаты",
+			ResultsElement.Result,
+			"OK",
+			"Отмена"
+		);
+	}
+	
+	
+	
+/*
+	Все работает!
+
+*/
+
 	function createQuestions() {	
 		for (var i = 1; i <= QuestionsCount; i++) {
 			QuestArray[i] = new QuestBox(i);
 		}
 	}
 	
-	var WelcomeMessage = new MessageBox();
-	WelcomeMessage.setTexts("Определение типа личности!",
-							"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
-							"ОК",
-							"Отмена");
-/*
-	Все работает!
-
-*/
-
-
 	
 	function TestEnding () {
 		ResultsElement.computingResults();
+		ResultsElement.saveResults();
 		ResultBox = new MessageBox();
 		ResultBox.setTexts(
 			"Ваши результаты:",
@@ -468,22 +536,13 @@
 		);
 	}
 
-	function AjaxQuery(datas) {
+	function AjaxQuery(datas, onReadyFunc, thisObject, AsynkOption) {
 		// datas - запрос, должен быть, в application/x-www-form-urlencoded формате данных
 		var request = new XMLHttpRequest();
-		request.open = ("POST", "/funcs.php", true);
+		request.open("POST", "/funcs.php", AsynkOption);
 		request.onreadystatechange = function() {
-			if (request.readyState === 4 && (request.status === 200 || request.statusText==="OK")) {
-				answr = request.responseText.slice(0, -3);//Обрезание боковых скобок и кавычек
-				answr = answr.split('&&&');//Создание массива из строки
-				for (var i = 0; i < answr.length; i++) {
-					answr[i] = answr[i].split('===');//Создание двумерного массива
-					answr[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
-				}
-				this.parent.setQuestion(answr["question"]);
-				this.parent.setFirstAnswer(answr["first_answer"]);
-				this.parent.setSecondAnswer(answr["second_answer"]);
-			}
+			if (request.readyState === 4 && (request.status === 200 || request.statusText==="OK"))
+				onReadyFunc(request, thisObject);
 		}		
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		request.send(datas);
@@ -494,4 +553,3 @@
 </script>
  
 </body>
-
