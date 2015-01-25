@@ -15,6 +15,7 @@
 <script type="text/javascript">
 /////////////=======================HELLO_MESSAGE_CLASS=================	
 	var MessageBox = function(header_text, msg_text, OKButton_text, CancelButton_text) {
+		
 		var MessageDiv, MessageHeaderDiv, MessageTextDiv, MessageButtonsDiv, OKButton, CancelButton, timer;
 		
 		this.MessageDiv = document.createElement("div");
@@ -511,7 +512,6 @@
 	var ResultBox;
 	var ResultsElement = new TestResults();	
 	var WelcomeMessage = new MessageBox();
-	//window.alert(ResultsElement.DataStatus);	
 	if (ResultsElement.DataStatus == "NO_DATA") {
 		WelcomeMessage.setTexts("Определение типа личности!",
 								"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
