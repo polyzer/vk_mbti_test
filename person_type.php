@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 /////////////=======================HELLO_MESSAGE_CLASS=================	
-	var MessageBox = function(header_text, msg_text, OKButton_text, CancelButton_text) {
+	var MessageBox = function(parameters) {
 		
 		var MessageDiv, MessageHeaderDiv, MessageTextDiv, MessageButtonsDiv, OKButton, CancelButton, timer;
 		
@@ -44,6 +44,8 @@
 		this.CancelButton.setAttribute("class", "CancelButton_class");
 		this.CancelButton.parent = this;
 		this.CancelButton.innerHTML = "Отмена";
+		
+		
 //----------------------FUNCTIONS_DEFINITION----------------------------
 
 		this.comeTo = function(to, value, parent) {
@@ -102,11 +104,21 @@
 		this.setCancelButtonText = function(CancelButton_text) {
 			this.CancelButton.innerHTML = CancelButton_text;
 		}
-		this.setTexts = function (header_text, msg_text, OKButton_text, CancelButton_text) {
-			this.setMessageHeader(header_text);
-			this.setMessageText(msg_text);
-			this.setOKButtonText(OKButton_text);
-			this.setCancelButtonText(CancelButton_text);
+		this.setTexts = function (parameters) {
+			if (parameters) {
+				if (parameters.header_text) {
+					this.setMessageHeader(parameters.header_text);
+				}
+				if (parameters.msg_text) {
+					this.setMessageText(parameters.msg_text);
+				}
+				if (parameters.OKButton_text) {
+					this.setMessageHeader(parameters.header_text);
+				}
+				if (parameters.CancelButton_text) {
+					this.setMessageHeader(parameters.header_text);
+				}
+			}
 		}
 
 //------------------------------HANDLERS--------------------------------
@@ -126,9 +138,27 @@
 //----------------------------APPENDS-----------------------------------		
 		this.MessageDiv.appendChild(this.MessageHeaderDiv);
 		this.MessageDiv.appendChild(this.MessageTextDiv);
-		this.MessageButtonsDiv.appendChild(this.OKButton);
-		this.MessageButtonsDiv.appendChild(this.CancelButton);
-		this.MessageDiv.appendChild(this.MessageButtonsDiv);
+		
+		if (parameters) {
+			if (parameters.header_text) {
+				this.setMessageHeader(parameters.header_text);
+			}
+			if (parameters.msg_text) {
+				this.setMessageText(parameters.msg_text);
+			}
+			if (parameters.OKButton_text) {
+				this.setMessageHeader(parameters.header_text);
+			}
+			if (parameters.CancelButton_text) {
+				this.setMessageHeader(parameters.header_text);
+			}
+			if (parameters.add_buttons) {
+				this.MessageButtonsDiv.appendChild(this.OKButton);
+				this.MessageButtonsDiv.appendChild(this.CancelButton);
+				this.MessageDiv.appendChild(this.MessageButtonsDiv);
+			}
+		}
+		
 		document.body.appendChild(this.MessageDiv);
 	
 	};	
@@ -485,6 +515,7 @@
 			viewer_type, sid, secret, access_token,
 			user_id, group_id, is_app_user, auth_key,
 			language, is_secure, ads_app_id, referrer;
+		this.user_id = 0;
 		answr = location.search;
 		answr = answr.split("&");
 		for (var i = 0; i < answr.length; i++) {
@@ -505,25 +536,31 @@
 	showDiv.style.left = "80%";
 	document.body.appendChild(showDiv);
 	
-	var MyVK = new VK_VARS();
 	var QuestionsCount = 70;
 	var QuestArray = [];
 	var CurrentQuestBox = 1;
 	var ResultBox;
 	var ResultsElement = new TestResults();	
-	var WelcomeMessage = new MessageBox();
+	var MyVK = new VK_VARS();
+	var WelcomeMessage = new MessageBox({
+			add_buttons: "true"
+		});
 	if (ResultsElement.DataStatus == "NO_DATA") {
-		WelcomeMessage.setTexts("Определение типа личности!",
-								"Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
-								"ОК",
-								"Отмена");
+		WelcomeMessage.setTexts({
+			header_text : "Определение типа личности!",
+			msg_text : "Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
+			add_buttons : true,
+			OKButton_text : "ОК",
+			CancelButton_text : "Отмена"
+		});
+
 	} else {
-		WelcomeMessage.setTexts(
-			"Ваши прошлые результаты",
-			ResultsElement.Result,
-			"OK",
-			"Отмена"
-		);
+		WelcomeMessage.setTexts({
+			header_text : "Ваши прошлые результаты",
+			msg_text : ResultsElement.Result,
+			OKButton_text : "OK",
+			CancelButton_text : "Отмена"
+		});
 	}
 	
 	
@@ -544,13 +581,12 @@
 	function TestEnding () {
 		ResultsElement.computingResults();
 		ResultsElement.saveResults();
-		ResultBox = new MessageBox();
-		ResultBox.setTexts(
-			"Ваши результаты:",
-			ResultsElement.Result,
-			"OK",
-			"Отмена"
-		);
+		ResultBox = new MessageBox({
+			header_text : "Ваши результаты:",
+			msg_text : ResultsElement.Result,
+			OKButton_text : "OK",
+			CancelButton_text : "Отмена"
+		});
 	}
 
 	function AjaxQuery(datas, onReadyFunc, thisObject, AsynkOption) {
