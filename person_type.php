@@ -79,7 +79,7 @@
 
 		
 		this.Accept = function () {
-			this.MessageDiv.style.left = "0%";
+			this.MessageDiv.style.left = "10%";
 			this.timer = setInterval(this.comeTo, 15, "top", -500, this);
 			//Удаляем Месседж,
 			//запускаем приложение!
@@ -303,7 +303,7 @@
 		this.FirstTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["A"]);
 			this.parent.BigDiv.style.left = "0%";
-			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
+			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -200,  this.parent);
 			if (CurrentQuestBox < QuestionsCount){
 				showDiv.innerHTML = CurrentQuestBox + " A";
 				++CurrentQuestBox;
@@ -315,7 +315,7 @@
 		this.SecondTapDiv.onclick = function() {
 			this.parent.OptionTap.apply(this.parent, ["B"]);
 			this.parent.BigDiv.style.left = "0%";
-			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -50,  this.parent);
+			this.parent.timer = setInterval(this.parent.comeTo, 15, "left", -200,  this.parent);
 			if (CurrentQuestBox < QuestionsCount){
 				showDiv.innerHTML = CurrentQuestBox + " B";
 				++CurrentQuestBox;
@@ -366,7 +366,7 @@
 			ThirdColumn, FourthColumn,
 			ThirdA, ThirdB, FourthA, FourthB,
 			 A, B, ResultString, DataStatus,
-			 DateTime, VKID;
+			 DateTime, VKID, Updated;
 		this.A = 0;
 		this.B = 0;
 		this.FirstA = 0;
@@ -379,6 +379,7 @@
 		this.FourthB = 0;
 		this.DataStatus = "NO_DATA";
 		this.VKID = MyVK.user_id;
+		this.Updated = false;
 
 				
 		this.setNullAB = function () {
@@ -387,6 +388,7 @@
 		}
 		
 		this.computingResults = function () {
+			this.setNullBA;
 			for (var i = 1; i <= 7; i++) {
 				j = i;
 				while (j <= QuestionsCount) {
@@ -491,6 +493,8 @@
 					thisObject.SecondColumn = answr["second_column"];
 					thisObject.ThirdColumn = answr["third_column"];
 					thisObject.FourthColumn = answr["fourth_column"];
+					thisObject.DateTime = answr["time_date"];
+					thisObject.Updated = true;
 					thisObject.Result = thisObject.FirstColumn + "<br>" + 
 								  thisObject.SecondColumn + "<br>" +
 								  thisObject.ThirdColumn + "<br>" +
@@ -504,6 +508,22 @@
 							
 		}
 		
+		this.updateResults = function () {
+			res = "first_column="+this.FirstColumn+"__"+this.FirstA+"__"+this.FirstB+"&";
+			res +="second_column="+this.SecondColumn+"__"+this.SecondA+"__"+this.SecondB+"&";
+			res +="third_column="+this.ThirdColumn+"__"+this.ThirdA+"__"+this.ThirdB+"&";
+			res +="fourth_column="+this.FourthColumn+"__"+this.FourthA+"__"+this.FourthB+"&";
+			res +="date_time="+this.DateTime+"&";
+			res +="vk_id="+ this.VKID + "&operation=update_test_result";
+			AjaxQuery(res, this.onUpdateReadyFunc, this, true);
+		}
+		
+		this.onUpdateReadyFunc = function (request) {
+			window.alert(request.responseText);
+		}
+		
+		
+		
 		this.getResults();
 		
 		
@@ -515,13 +535,13 @@
 			viewer_type, sid, secret, access_token,
 			user_id, group_id, is_app_user, auth_key,
 			language, is_secure, ads_app_id, referrer;
-		this.user_id = 0;
 		answr = location.search;
 		answr = answr.split("&");
 		for (var i = 0; i < answr.length; i++) {
 			answr[i] = answr[i].split('=');//Создание двумерного массива
 			this[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
 		}	
+		this.user_id = "3923";
 		if (this.user_id == 0) {
 			window.alert("Запустите приложение со своей страницы, пожалуйста!");
 
@@ -535,34 +555,43 @@
 	showDiv.style.top = "0%";
 	showDiv.style.left = "80%";
 	document.body.appendChild(showDiv);
-	
+
+	var MyVK = new VK_VARS();	
 	var QuestionsCount = 70;
 	var QuestArray = [];
 	var CurrentQuestBox = 1;
 	var ResultBox;
 	var ResultsElement = new TestResults();	
-	var MyVK = new VK_VARS();
-	var WelcomeMessage = new MessageBox({
+	var WelcomeMessage;
+	if (MyVK.user_id == 0) {
+			WelcomeMessage = new MessageBox({
+				header_text : "Определение типа личности!",
+				msg_text : "Пожалуйста, запустите приложение со своей страницы!",
+			});
+	} else {
+			WelcomeMessage = new MessageBox({
 			add_buttons: "true"
 		});
-	if (ResultsElement.DataStatus == "NO_DATA") {
-		WelcomeMessage.setTexts({
-			header_text : "Определение типа личности!",
-			msg_text : "Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
-			add_buttons : true,
-			OKButton_text : "ОК",
-			CancelButton_text : "Отмена"
-		});
+		if (ResultsElement.DataStatus == "NO_DATA") {
+			
+			
+			WelcomeMessage.setTexts({
+				header_text : "Определение типа личности!",
+				msg_text : "Тест Кейрси для определения теста личности позволяет с высокой точностью определить Ваш тип личности по результатам ответов на предложенные вопросы.",
+				add_buttons : true,
+				OKButton_text : "ОК",
+				CancelButton_text : "Отмена"
+			});
 
-	} else {
-		WelcomeMessage.setTexts({
-			header_text : "Ваши прошлые результаты",
-			msg_text : ResultsElement.Result,
-			OKButton_text : "OK",
-			CancelButton_text : "Отмена"
-		});
+		} else {
+			WelcomeMessage.setTexts({
+				header_text : "Ваши прошлые результаты",
+				msg_text : ResultsElement.Result,
+				OKButton_text : "OK",
+				CancelButton_text : "Отмена"
+			});
+		}
 	}
-	
 	
 	
 	
@@ -580,7 +609,11 @@
 	
 	function TestEnding () {
 		ResultsElement.computingResults();
-		ResultsElement.saveResults();
+		if (ResultsElement.Updated == true) {
+			ResultsElement.updateResults();
+		} else {
+			ResultsElement.saveResults();
+		}
 		ResultBox = new MessageBox({
 			header_text : "Ваши результаты:",
 			msg_text : ResultsElement.Result,
