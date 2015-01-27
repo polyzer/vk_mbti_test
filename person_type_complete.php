@@ -633,7 +633,7 @@ INFP - спокойные, сдержанные и даже застенчивы
 					answr[i] = answr[i].split('===');//Создание двумерного массива
 					answr[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
 				}
-				window.alert(answr["server_answer"]);
+				//window.alert(answr["server_answer"]);
 		}
 		
 		this.getResults = function () {
@@ -818,13 +818,13 @@ INFP - спокойные, сдержанные и даже застенчивы
 			viewer_type, sid, secret, access_token,
 			user_id, group_id, is_app_user, auth_key,
 			language, is_secure, ads_app_id, referrer;
+		this.user_id = "3923";
 		answr = location.search;
 		answr = answr.split("&");
 		for (var i = 0; i < answr.length; i++) {
 			answr[i] = answr[i].split('=');//Создание двумерного массива
 			this[answr[i][0]] = answr[i][1];//Создание объекта, со свойствами двумерного массива.
 		}	
-		this.user_id = "3923";
 		if (this.user_id == 0) {
 			window.alert("Запустите приложение со своей страницы, пожалуйста!");
 
