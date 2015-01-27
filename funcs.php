@@ -6,7 +6,6 @@ if ($_SESSION["vk_persontype"]["true_connection"] &&
 {
 	$operation = $_POST["operation"];
 
-	
 	$mysqli = new mysqli("localhost", //адрес хоста БД
 						 "root", // имя пользователя
 						 "000000", //пароль
@@ -77,6 +76,26 @@ if ($_SESSION["vk_persontype"]["true_connection"] &&
 		
 		
 	}
+	
+	if ($operation === "update_test_result") {
+		$first_column = $_POST["first_column"];
+		$second_column = $_POST["second_column"];
+		$third_column = $_POST["third_column"];//Сделать преобразование $_POST
+		$fourth_column = $_POST["fourth_column"];
+		$time_date = date("Y-m-d H:i:s");
+		$VKID = $_POST["vk_id"];
+		$query = "UPDATE `results` SET `first_column` = '$first_column',
+										`second_column` = '$second_column',
+										`third_column` = '$third_column',
+										`fourth_column` = '$fourth_column',
+										`time_date` = '$time_date'
+									WHERE `vk_id` = $VKID;";
+		if ($mysqli->query($query)) {
+			echo "Данные обновлены!";
+		}
+	
+	}
+	
 	
 	
 
