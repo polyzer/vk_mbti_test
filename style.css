@@ -1,6 +1,6 @@
 		body{
 			height: 400px;
-			width: 1000px;
+			width: 1200px;
 		}
 		.BigDiv_class{
 			background-color: #567ca4;
@@ -17,12 +17,10 @@
 			position: relative;
 			top: 0%;
 			left: 0%;
-			
 			margin: 0px 0px 0px 0px;
-			
 			text-align: center;
-			font-size: 150%;
-			
+			font-size: 180%;
+			font-family: 'Bitter', serif;
 			height: 50%;
 			border-top: 5px solid #567ca4;
 			padding-top: 10px;
@@ -43,7 +41,7 @@
 			width: 100%;	
 			padding-top: 5px;
 			padding-bottom: 5px;
-			font-size: 110%;
+			font-size: 130%;
 			
 		}
 		.TapDiv_class{
@@ -120,10 +118,10 @@
 		}
 		
 		.OKButton_class{
-			background-color: #7D7D7D;
+			background-color: #e8e8e8;
 			position: absolute;
 			top: 0%;
-			left: 3%;
+			left: 0%;
 			height: auto;
 			width: auto;
 			border-top: 3px solid orange;
@@ -134,10 +132,10 @@
 			transition-duration: 0.7s;
 		}
 		.CancelButton_class{
-			background-color: #7D7D7D;
-			position: relative;
+			background-color: #e8e8e8;
+			position: absolute;
 			top: 0%;
-			left: 60%;
+			right: 0%;
 			height: auto;
 			width: auto;
 			border-top: 3px solid orange;
@@ -149,9 +147,83 @@
 		}
 		.OKButton_class:hover{
 			background-color: #25FF40;
-			transition-property: 
+			transition-property: background-color;
+			transition-duration: 0.7s;
 		}
 		
-		.CancelButton_class{
+		.CancelButton_class:hover{
 			background-color: #25FF40;		
+			transition-property: background-color;
+			transition-duration: 0.7s;
 		}
+
+	#MainDiv{
+		position: absolute;
+		top: 200%;
+		left: 2%;
+		width: 85%;
+	}
+	#HeaderDiv{
+		position: relative;
+		top: 0%;
+		left: 0%;
+		height: auto;
+		width: 100%;
+		text-align: center;
+		font-size: 290%;
+		font-family: 'Bitter', serif;
+	}
+	#DescriptionDiv{
+		position: relative;
+		top: 0%;
+		left: 0%;
+		height: auto;
+		width: 100%;
+		text-align: center;
+		font-size: 130%;
+		padding: 5px 5px 5px 5px;
+		background-color: #f3f4f6;
+		opacity: 0.8;
+	}
+	#TypeMenuDiv{
+		position: absolute;
+		top: 0%;
+		left: 100%;
+		height: auto;
+		width: 20%;
+	}
+	.letters{
+		border: 1px solid red;
+		margin: 5px 5px 5px 5px;
+		padding: 5px 5px 5px 5px;
+		background-color: #047fac;
+		color: white;
+		display: inline;
+		font-size: 300%;
+		font-family: monospace;
+	}
+	.letters:hover{
+		cursor: pointer;
+		color: black;
+		background-color: white;
+		transition-property: background-color, color;
+		transition-duration: 0.7s;
+		
+	}
+	
+	.LettersContainer{
+		margin: 10% 10% 10% 10%;
+	}
+	
+	.LettersCombinationText{
+		visibility: hidden;
+	}
+
+	#MAN{
+		position: absolute;
+		top: 400px;
+		left: 20%;
+		height: 700px;
+		width: 467px;
+		background-image: url("./man.png");
+	}
