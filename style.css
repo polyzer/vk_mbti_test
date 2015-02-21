@@ -145,6 +145,20 @@
 			transition-property: background-color width border-right;
 			transition-duration: 0.7s;
 		}
+		.PublicButton_class{
+			background-color: #e8e8e8;
+			position: absolute;
+			top: 0%;
+			right: 0%;
+			height: auto;
+			width: auto;
+			border-top: 3px solid orange;
+			margin: 0 auto;			
+			padding: 5px 5px 5px 5px;
+			font-size: 140%;
+			transition-property: background-color width border-right;
+			transition-duration: 0.7s;
+		}
 		.OKButton_class:hover{
 			background-color: #25FF40;
 			transition-property: background-color;
@@ -153,6 +167,11 @@
 		
 		.CancelButton_class:hover{
 			background-color: #25FF40;		
+			transition-property: background-color;
+			transition-duration: 0.7s;
+		}
+		.PublicButton_class:hover{
+			background-color: #0096E3;		
 			transition-property: background-color;
 			transition-duration: 0.7s;
 		}
@@ -217,6 +236,11 @@
 	
 	.LettersCombinationText{
 		visibility: hidden;
+	}
+	
+	.type_def_style{
+		text-decoration: underline;
+		font-size: 150%;
 	}
 
 	#MAN{
