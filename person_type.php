@@ -10,8 +10,9 @@
     <meta charset="UTF-8" />
     <link type="text/css" rel="stylesheet" href="./style.css" />
    	<link href='http://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
-   	<script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript">
-	</script>
+   	<script src="//vk.com/js/api/xd_connection.js?2"  type="text/javascript"></script>
+	<script type="text/javascript" src="//ad.mail.ru/static/vkadman.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="//js.appscentrum.com/scr/preroll.js" charset="utf-8"></script>
 </head>
 <body>
 
@@ -258,65 +259,65 @@ INFP - спокойные, сдержанные и даже застенчивы
 				switch(ResultsElement.FirstColumn+ResultsElement.SecondColumn+ResultsElement.ThirdColumn+ResultsElement.FourthColumn) {
 					//ТИП ДИОНИСИЙ
 					case "ESFP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018186"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018186"}, function(data) {
 
 						});
 						break;
 					case "ISFP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018023"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018023"}, function(data) {
 
 						});
 						break;
 					case "ESTP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018133"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018133"}, function(data) {
 
 						});
 						break;
 					case "ISTP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018090"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018090"}, function(data) {
 						});
 						break;
 					//Кончается тип ДИОНИСИЙ
 					//тип ЭПИМЕТЕЙ	
 					case "ESFJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353016722"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353016722"}, function(data) {
 
 						});
 						break;
 					case "ISFJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_211858307"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353016819"}, function(data) {
 
 						});
 						break;
 					case "ESTJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353016588"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353016588"}, function(data) {
 
 						});
 						break;
 					case "ISTJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353016421"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353016421"}, function(data) {
 
 						});
 						break;
 					//Кончается тип Эпиметей
 					//ТИП АПОЛЛОН
 					case "ENFJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018348"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018348"}, function(data) {
 
 						});
 						break;
 					case "INFJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018428"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018428"}, function(data) {
 
 						});
 						break;
 					case "ENFP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018318"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018318"}, function(data) {
 
 						});
 						break;
 					case "INFP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018509"
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018509"
 											 //message: "[club87421603|Тип моей личности:sdfsdfsdfs]"
 											}, function(data) {
 
@@ -325,21 +326,21 @@ INFP - спокойные, сдержанные и даже застенчивы
 					//Кончается тип АПОЛЛОН
 					//ТИП ПРОМЕТЕЙ
 					case "ENTJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018970"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018970"}, function(data) {
 
 						});
 						break;
 					case "INTJ":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018925"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018925"}, function(data) {
 
 						});
 						break;
 					case "ENTP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353019032"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353019032"}, function(data) {
 						});
 						break;
 					case "INTP":
-						VK.api("wall.post", {message: "Твой тип личности:", attachments: "photo-87421603_353018851"}, function(data) {
+						VK.api("wall.post", {message: "Твой тип личности: (http://vk.com/app4766007)", attachments: "photo-87421603_353018851"}, function(data) {
 
 						});
 						break;
@@ -1087,7 +1088,11 @@ INFP - спокойные, сдержанные и даже застенчивы
      // API initialization succeeded 
      // Your code here 
      VK_initialised = true;
-    
+    var app_id = 4766007;
+    var a=new VKAdman();
+    a.onNoAds(function(){console.log("Adman has no ads")});
+    a.setupPreroll(app_id);
+    admanStat(app_id, VK_VARS.user_id);    
   }, function() { 
 	 // API initialization failed 
 	 // Can reload page here 
